@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "serverless": "^1.32.0"
+  },
+  "name": "callcenter",
+  "devDependencies": {
+    "serverless-python-requirements": "^4.2.4"
+  }
+}

@@ -1,0 +1,51 @@
+#
+service: callcenter # NOTE: update this with your service name
+frameworkVersion: "=1.32.0"
+provider:
+  name: aws
+  runtime: python3.6
+  stage: ${opt:stage, env:STAGE}
+  region: ap-northeast-1
+
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+  environment:
+    STAGE: ${self:provider.stage}
+    GOOGLE_APPLICATION_CREDENTIALS: credentials.json
+
+package:
+  exclude:
+    - "**"
+  include:
+    - handler.py
+    - credentials.json
+
+functions:
+  record:
+    handler: handler.record
+    memorySize: 256
+    timeout: 60
+    events:
+      - http:
+          path: record
+          method: post
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
