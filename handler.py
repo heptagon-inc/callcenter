@@ -1,23 +1,10 @@
 # coding: utf-8
 
-import os
-from twilio.twiml.voice_response import VoiceResponse
+import json
+from callcenter import Rec, File
 
-
-stage = os.getenv('STAGE')
-
-
-def callcenterTwilioResponse():
-    r = VoiceResponse()
-    r.record(
-        timeout=10,
-        maxLength=180,
-        playBeep=True,
-        trim='trim-silence',
-        recordingStatusCallback='/'+stage+'/callback',
-        recordingStatusCallbackMethod='POST'
-    )
-    return str(r)
+rec = Rec()
+file = File()
 
 
 def record(event, context):
@@ -26,10 +13,17 @@ def record(event, context):
         "headers": {
             "Content-Type": "application/xml"
         },
-        "body": callcenterTwilioResponse()
+        "body": rec.response_xml()
     }
-    print(response)
+    return response
 
+
+def callback(event, context):
+    print(event)
+    response = {
+        "statusCode": 200,
+        "body": json.dumps(event)
+    }
     return response
 
 

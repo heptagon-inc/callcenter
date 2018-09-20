@@ -24,3 +24,4 @@ var/
 .envrc
 node_modules/
 credentials.json
+__pycache__/

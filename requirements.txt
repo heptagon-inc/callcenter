@@ -2,3 +2,4 @@ autopep8
 flake8
 boto3
 twilio
+requests

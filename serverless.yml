@@ -1,27 +1,17 @@
 #
-service: callcenter # NOTE: update this with your service name
+service: callcenter
 frameworkVersion: "=1.32.0"
 provider:
   name: aws
   runtime: python3.6
   stage: ${opt:stage, env:STAGE}
   region: ap-northeast-1
-
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource:
+        - arn:aws:s3:::${self:service}-rec-data-${self:provider.stage}/*
   environment:
     STAGE: ${self:provider.stage}
     GOOGLE_APPLICATION_CREDENTIALS: credentials.json
@@ -31,6 +21,7 @@ package:
     - "**"
   include:
     - handler.py
+    - callcenter.py
     - credentials.json
 
 functions:
@@ -42,6 +33,32 @@ functions:
       - http:
           path: record
           method: post
+  callback:
+    handler: handler.callback
+    memorySize: 256
+    timeout: 60
+    events:
+      - http:
+          path: callback
+          method: post
+
+resources:
+  Resources:
+    RecDataBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:service}-rec-data-${self:provider.stage}
+        AccessControl: Private
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        VersioningConfiguration:
+          Status: Enabled
+  Outputs:
+    RecDataBucketName:
+      Value:
+        Ref: RecDataBucket
 
 plugins:
   - serverless-python-requirements
