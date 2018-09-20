@@ -6,6 +6,7 @@ provider:
   runtime: python3.6
   stage: ${opt:stage, env:STAGE}
   region: ap-northeast-1
+  tracing: true
   environment:
     STAGE: ${self:provider.stage}
     GOOGLE_APPLICATION_CREDENTIALS: credentials.json
@@ -102,6 +103,7 @@ resources:
               Action: sts:AssumeRole
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
     CallbackRole:
       Type: AWS::IAM::Role
       Properties:
@@ -115,6 +117,7 @@ resources:
               Action: sts:AssumeRole
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
         Policies:
           - PolicyName: ${self:service}-callback-policy-${self:provider.stage}
             PolicyDocument:
@@ -137,6 +140,7 @@ resources:
               Action: sts:AssumeRole
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
         Policies:
           - PolicyName: ${self:service}-speech-to-text-policy-${self:provider.stage}
             PolicyDocument:
@@ -160,9 +164,11 @@ resources:
               Action: sts:AssumeRole
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole
+          - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
 
 plugins:
   - serverless-python-requirements
+  - serverless-plugin-tracing
 
 custom:
   pythonRequirements:

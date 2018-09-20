@@ -3,6 +3,10 @@
 import json
 import urllib
 from callcenter import Rec, File, S3, Speech, Sqs, Slack
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.core import patch_all
+
+patch_all()
 
 rec = Rec()
 file = File()

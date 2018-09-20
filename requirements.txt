@@ -4,3 +4,4 @@ boto3
 twilio
 requests
 google-cloud-speech
+aws-xray-sdk

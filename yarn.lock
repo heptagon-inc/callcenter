@@ -1736,6 +1736,10 @@ serve-static@1.13.2:
     parseurl "~1.3.2"
     send "0.16.2"
 
+serverless-plugin-tracing@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/serverless-plugin-tracing/-/serverless-plugin-tracing-2.0.0.tgz#df6b8b3166ac9bb70a37c7fc875014b2369158f6"
+
 serverless-python-requirements@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/serverless-python-requirements/-/serverless-python-requirements-4.2.4.tgz#eea9592a3c1ea9fa3c2499bc770ab3bea8e37d09"

@@ -4,6 +4,7 @@
   },
   "name": "callcenter",
   "devDependencies": {
+    "serverless-plugin-tracing": "^2.0.0",
     "serverless-python-requirements": "^4.2.4"
   }
 }
