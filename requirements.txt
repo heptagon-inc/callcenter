@@ -3,3 +3,4 @@ flake8
 boto3
 twilio
 requests
+google-cloud-speech
